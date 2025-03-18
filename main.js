@@ -127,8 +127,10 @@ function update() {
         player.x += player.velocityX;
 
         // Wrap around screen
-        if (player.x > canvas.width) player.x = 0;
-        if (player.x + player.width < 0) player.x = canvas.width;
+        // Prevent player from going outside screen bounds
+        if (player.x < 0) player.x = 0;
+        if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+
 
         // Platform collision
         platforms.forEach((platform) => {
