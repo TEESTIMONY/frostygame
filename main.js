@@ -32,6 +32,13 @@ let gameOverState = false;
 let score = 0;
 let highScore = localStorage.getItem("highScore") ? parseInt(localStorage.getItem("highScore")) : 0;
 
+window.addEventListener("resize", () => {
+    let canvas = document.getElementById("yourCanvasId");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+
+
 
 // Generate platforms
 function createPlatforms() {
