@@ -27,12 +27,17 @@
 } */
 
 
-
 * {
+    user-select: none; /* Prevents text selection */
+    -webkit-user-select: none; /* For Safari */
+    -moz-user-select: none; /* For Firefox */
+    -ms-user-select: none; /* For IE/Edge */
+    touch-action: manipulation; /* Prevents long-press context menu */
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 
 body {
     display: flex;
