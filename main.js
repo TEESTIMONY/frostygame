@@ -33,7 +33,7 @@ let score = 0;
 let highScore = localStorage.getItem("highScore") ? parseInt(localStorage.getItem("highScore")) : 0;
 
 window.addEventListener("resize", () => {
-    let canvas = document.getElementById("yourCanvasId");
+    let canvas = document.getElementById("gameCanvas");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
