@@ -79,6 +79,8 @@ canvas {
     height: 100%;
     border-radius: 15px;
     background-color:transparent;
+    user-select: none;
+    touch-action: none;
     -webkit-touch-callout: none; /* Prevents long-press menu on iOS */
 }
 
