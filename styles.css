@@ -1,0 +1,26 @@
+#startButton {
+    position: absolute;
+    left: 50%;
+    top: 50px;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+}
+.canvas-container {
+    border: 2px solid black;
+    background: url('img1.jpg') no-repeat center center;
+    background-size: cover;
+    border: none;
+}
+.canvas-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(15px);
+    z-index: -10;
+}
