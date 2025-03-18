@@ -17,10 +17,10 @@ const GRAVITY = 0.4;
 const JUMP_POWER = -17;
 const PLAYER_SPEED = 5;
 const PLATFORM_WIDTH = 90;
-const PLATFORM_HEIGHT = 60;
+const PLATFORM_HEIGHT = 50;
 const NUM_PLATFORMS = 6;
 const POWER_UP_SIZE = 80;
-const ENEMY_SIZE = 60;
+const ENEMY_SIZE = 30;
 
 let player = { x: 0, y: 0, width: 80, height: 80, velocityY: 0, velocityX: 0 };
 let platforms = [];
@@ -30,6 +30,8 @@ let particles = [];
 let gameStarted = false;
 let gameOverState = false;
 let score = 0;
+let highScore = localStorage.getItem("highScore") ? parseInt(localStorage.getItem("highScore")) : 0;
+
 
 // Generate platforms
 function createPlatforms() {
@@ -97,6 +99,11 @@ function gameOver() {
     enemies = [];
     powerUps = [];
     particles = [];
+    // Check if new high score is achieved
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem("highScore", highScore); // Save to localStorage
+    }
 
     // Display Game Over message
     ctx.fillStyle = "white";
@@ -131,18 +138,32 @@ function update() {
         if (player.x < 0) player.x = 0;
         if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
 
+        if (player.y < player.maxHeight) {
+            score += Math.abs(player.maxHeight - player.y) / 10;
+            player.maxHeight = player.y;
+        }
+
+        // Draw score & high score
+        ctx.fillStyle = "white";
+        ctx.font = "20px Arial";
+        ctx.textAlign = "left";
+        ctx.fillText("Score: " + Math.floor(score), 10, 30);
+        ctx.fillText("High Score: " + highScore, 10, 60);
+
+        
+
 
         // Platform collision
         platforms.forEach((platform) => {
             if (
                 player.velocityY > 0 &&
-                player.y + player.height >= platform.y + 1 &&
-                player.y + player.height - player.velocityY <= platform.y + 1 &&
+                player.y + player.height >= platform.y &&
+                player.y + player.height - player.velocityY <= platform.y&&
                 player.x + player.width > platform.x &&
                 player.x < platform.x + platform.width
             ) {
                 player.velocityY = JUMP_POWER;
-                score += 10;
+                // score += 10;
 
                 // Randomly spawn power-ups and enemies
                 if (Math.random() < 0.2) spawnPowerUp();
@@ -216,6 +237,8 @@ function update() {
     powerUps.forEach((powerUp) => ctx.drawImage(powerUpImg, powerUp.x, powerUp.y, POWER_UP_SIZE, POWER_UP_SIZE));
     enemies.forEach((enemy) => ctx.drawImage(enemyImg, enemy.x, enemy.y, ENEMY_SIZE, ENEMY_SIZE));
     ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
+
+    
 
     updateAnimationFrame = requestAnimationFrame(update);
 }
