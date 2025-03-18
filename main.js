@@ -106,10 +106,20 @@ function gameOver() {
     enemies = [];
     powerUps = [];
     particles = [];
-    // Check if new high score is achieved
+    // Send score to the backend
+    fetch("/api/score", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: "Player1", score: Math.floor(score) }),
+      })
+      .then(res => res.json())
+      .then(data => console.log(data))
+      .catch(err => console.error("Error saving score:", err));
+      
+
     if (score > highScore) {
         highScore = score;
-        localStorage.setItem("highScore", highScore); // Save to localStorage
+        localStorage.setItem("highScore", highScore);
     }
 
     // Display Game Over message
