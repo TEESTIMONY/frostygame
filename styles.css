@@ -79,6 +79,7 @@ canvas {
     height: 100%;
     border-radius: 15px;
     background-color:transparent;
+    -webkit-touch-callout: none; /* Prevents long-press menu on iOS */
 }
 
 /* Start button styling */
