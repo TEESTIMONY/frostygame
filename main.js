@@ -113,7 +113,7 @@ function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (gameOverState) {
-        ctx.fillStyle = "grey";
+        ctx.fillStyle = "white";
         ctx.font = "50px 'Rubik Glitch', system-ui";
         ctx.textAlign = "center";
         ctx.fillText("Game Over!", canvas.width / 2, canvas.height / 2);
@@ -215,7 +215,7 @@ function update() {
     enemies.forEach((enemy) => ctx.drawImage(enemyImg, enemy.x, enemy.y, ENEMY_SIZE, ENEMY_SIZE));
     ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
 
-    requestAnimationFrame(update);
+    updateAnimationFrame = requestAnimationFrame(update);
 }
 
 // Start button event
