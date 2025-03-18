@@ -107,14 +107,18 @@ function gameOver() {
     powerUps = [];
     particles = [];
     // Send score to the backend
+    const username = prompt("Enter your name:"); // Ask for username
+
+    if (username) {
     fetch("/api/score", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: "Player1", score: Math.floor(score) }),
-      })
-      .then(res => res.json())
-      .then(data => console.log(data))
-      .catch(err => console.error("Error saving score:", err));
+        body: JSON.stringify({ username, score: Math.floor(score) }),
+    })
+        .then(res => res.json())
+        .then(data => console.log(data))
+        .catch(err => console.error("Error saving score:", err));
+    }
       
 
     if (score > highScore) {
