@@ -31,12 +31,31 @@ let gameStarted = false;
 let gameOverState = false;
 let score = 0;
 let highScore = localStorage.getItem("highScore") ? parseInt(localStorage.getItem("highScore")) : 0;
+let scoreInterval;
+
+
+const BACKEND_URL = "https://my-backend-red.vercel.app/api/score";
 
 window.addEventListener("resize", () => {
     let canvas = document.getElementById("gameCanvas");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
+
+// Function to send score to backend
+async function sendScoreToBackend(currentScore) {
+    try {
+        const response = await fetch(BACKEND_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ player: "Guest", score: currentScore }),
+        });
+        const result = await response.json();
+        console.log("Score sent:", result);
+    } catch (error) {
+        console.error("Error sending score:", error);
+    }
+}
 
 
 
@@ -106,25 +125,32 @@ function gameOver() {
     enemies = [];
     powerUps = [];
     particles = [];
-    // Send score to the backend
-    const username = prompt("Enter your name:"); // Ask for username
 
-    if (username) {
-    fetch("/api/score", {
+    // Prompt user for name
+    let playerName = prompt("Enter your name to save your score:");
+    if (!playerName) playerName = "Guest"; // Default name if none provided
+
+    // Send final score to backend with name
+    fetch(BACKEND_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, score: Math.floor(score) }),
+        body: JSON.stringify({ player: playerName, score: Math.floor(score) })
     })
-        .then(res => res.json())
-        .then(data => console.log(data))
-        .catch(err => console.error("Error saving score:", err));
-    }
-      
+    .then(response => response.json())
+    .then(data => console.log("Score saved:", data))
+    .catch(error => console.error("Error saving score:", error));
+    
 
     if (score > highScore) {
         highScore = score;
         localStorage.setItem("highScore", highScore);
     }
+
+    // Send final score to backend
+    sendScoreToBackend(Math.floor(score));
+
+    // Stop periodic score updates
+    clearInterval(scoreInterval);
 
     // Display Game Over message
     ctx.fillStyle = "white";
@@ -286,6 +312,8 @@ startButton.addEventListener("click", () => {
         powerUps = [];
         enemies = [];
         particles = [];
+
+
 
         // Cancel all previous animation frames before starting a new loop
         cancelAnimationFrame(updateAnimationFrame);
